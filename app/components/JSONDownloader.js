@@ -6,6 +6,7 @@ export default function JSONDownloader({
   rawParameters,
   locationParameters,
   computedParameters,
+  edges,
 }) {
   const handleGenerateJSON = () => {
     const json = {
@@ -27,6 +28,17 @@ export default function JSONDownloader({
       rawParameters,
       locationParameters,
       computedParameters,
+      edges: Object.entries(edges).reduce((acc, [key, edge]) => {
+        acc[key] = {
+          type: edge.type,
+          conversionFunction: edge.conversionFunction,
+          resourceNodeName: edge.resourceNodeName,
+          transportTime: edge.type === 'TemporalTime' ? edge.transportTime : '',
+          specificTime: edge.type === 'SpecificTime' ? edge.specificTime : '',
+          direction: edge.direction,
+        };
+        return acc;
+      }, {}),
     };
 
     const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' });

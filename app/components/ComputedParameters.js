@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import OperandEditor from './OperandEditor';
+import OperandEditor, { AVAILABLE_OPERATIONS } from './OperandEditor';
+
 export default function ComputedParameters({ computedParameters, setComputedParameters, rawParameters, locationParameters }) {
   const [newParamKey, setNewParamKey] = useState('');
   const [operation, setOperation] = useState('multiply');
@@ -7,13 +8,17 @@ export default function ComputedParameters({ computedParameters, setComputedPara
 
   const handleAddComputedParameter = () => {
     if (newParamKey && operation) {
-      setComputedParameters({
+      const updatedComputedParameters = {
         ...computedParameters,
         [newParamKey]: {
           operation,
           operands,
         },
-      });
+      };
+
+      setComputedParameters(updatedComputedParameters);
+      console.log("Updated computedParameters:", updatedComputedParameters); // Debug log
+
       setNewParamKey('');
       setOperation('multiply');
       setOperands([]);
@@ -66,15 +71,17 @@ export default function ComputedParameters({ computedParameters, setComputedPara
           value={operation}
           onChange={(e) => setOperation(e.target.value)}
         >
-          <option value="multiply">Multiply</option>
-          {/* Add more operations here if needed */}
+          {AVAILABLE_OPERATIONS.map((op) => (
+            <option key={op} value={op}>
+              {op}
+            </option>
+          ))}
         </select>
 
         <h4 className="text-md font-semibold mt-2">Operands</h4>
         {operands.map((operand, index) => (
           <OperandEditor
             key={index}
-            index={index}
             operand={operand}
             setOperand={(updatedOperand) => {
               const updatedOperands = [...operands];
@@ -83,6 +90,8 @@ export default function ComputedParameters({ computedParameters, setComputedPara
             }}
             rawParameters={rawParameters}
             locationParameters={locationParameters}
+            computedParameters={computedParameters} // Pass computed parameters
+            restrictStateVariables={true} // Restrict access to state variables
           />
         ))}
 

@@ -5,6 +5,7 @@ import ResourceNodes from './ResourceNodes';
 import RawParameters from './RawParameters';
 import LocationParameters from './LocationParameters';
 import ComputedParameters from './ComputedParameters';
+import Edges from './Edges';
 import JSONDownloader from './JSONDownloader';
 
 export default function ComponentBuilder() {
@@ -15,6 +16,7 @@ export default function ComponentBuilder() {
   const [rawParameters, setRawParameters] = useState([]);
   const [locationParameters, setLocationParameters] = useState({});
   const [computedParameters, setComputedParameters] = useState({});
+  const [edges, setEdges] = useState({});
 
   return (
     <div className="p-4 bg-gray-100 min-h-screen">
@@ -46,6 +48,15 @@ export default function ComponentBuilder() {
         rawParameters={rawParameters} 
         locationParameters={locationParameters} 
       />
+      <Edges
+        edges={edges}
+        setEdges={setEdges}
+        stateVariables={stateVariables}
+        resourceNodes={resourceNodes}
+        rawParameters={rawParameters}
+        locationParameters={locationParameters}
+        computedParameters={computedParameters}
+      />
 
       <JSONDownloader
         name={name}
@@ -55,6 +66,7 @@ export default function ComponentBuilder() {
         rawParameters={rawParameters}
         locationParameters={locationParameters}
         computedParameters={computedParameters}
+        edges={edges}
       />
     </div>
   );
