@@ -1,13 +1,22 @@
+import React from 'react';
 import StateVariable from './StateVariable';
 
 export default function StateVariables({ stateVariables = [], setStateVariables }) {
   const handleAddStateVariable = () => {
-    setStateVariables([...stateVariables, { name: '', temporal: false, bounds: { min: 0, max: 10 }, isExpanded: false }]);
+    setStateVariables([
+      ...stateVariables,
+      {
+        name: '',
+        temporal: false,
+        bounds: { min: 0, max: 10 },
+        isExpanded: false,
+      },
+    ]);
   };
 
   const handleStateVariableChange = (index, field, value) => {
     const updatedVariables = [...stateVariables];
-    updatedVariables[index][field] = field === 'temporal' ? value === 'true' : value;
+    updatedVariables[index][field] = value; // Use the value directly
     setStateVariables(updatedVariables);
   };
 
@@ -27,7 +36,10 @@ export default function StateVariables({ stateVariables = [], setStateVariables 
           onDelete={handleDeleteStateVariable}
         />
       ))}
-      <button className="px-4 py-2 bg-blue-500 text-white rounded" onClick={handleAddStateVariable}>
+      <button
+        className="px-4 py-2 bg-blue-500 text-white rounded"
+        onClick={handleAddStateVariable}
+      >
         Add State Variable
       </button>
     </div>

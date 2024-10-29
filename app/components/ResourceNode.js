@@ -1,6 +1,10 @@
+import React from 'react';
+
 export default function ResourceNode({ index, node, onChange, onDelete }) {
   const handleChange = (field, value) => {
-    const parsedValue = field === 'isPublic' || field === 'isInequality' ? value === 'true' : value;
+    // Parse boolean fields
+    const parsedValue =
+      field === 'isPublic' || field === 'isInequality' ? value === 'true' : value;
     onChange(index, field, parsedValue);
   };
 
@@ -22,7 +26,7 @@ export default function ResourceNode({ index, node, onChange, onDelete }) {
         type="text"
         placeholder="Node Key"
         className="w-full p-2 border border-gray-300 rounded mb-2"
-        value={node.resourceNodeKey}
+        value={node.resourceNodeKey || ''}
         onChange={(e) => handleChange('resourceNodeKey', e.target.value)}
       />
 
@@ -32,7 +36,7 @@ export default function ResourceNode({ index, node, onChange, onDelete }) {
         type="text"
         placeholder="Resource Name"
         className="w-full p-2 border border-gray-300 rounded mb-2"
-        value={node.resourceName}
+        value={node.resourceName || ''}
         onChange={(e) => handleChange('resourceName', e.target.value)}
       />
 
@@ -40,7 +44,7 @@ export default function ResourceNode({ index, node, onChange, onDelete }) {
       <label className="block text-sm font-medium mb-1">Is Public</label>
       <select
         className="w-full p-2 border border-gray-300 rounded mb-2"
-        value={node.isPublic}
+        value={node.isPublic ? 'true' : 'false'}
         onChange={(e) => handleChange('isPublic', e.target.value)}
       >
         <option value="true">True</option>
@@ -53,7 +57,7 @@ export default function ResourceNode({ index, node, onChange, onDelete }) {
         type="text"
         placeholder="Location"
         className="w-full p-2 border border-gray-300 rounded mb-2"
-        value={node.location}
+        value={node.location || ''}
         onChange={(e) => handleChange('location', e.target.value)}
       />
 
@@ -61,7 +65,7 @@ export default function ResourceNode({ index, node, onChange, onDelete }) {
       <label className="block text-sm font-medium mb-1">Is Inequality</label>
       <select
         className="w-full p-2 border border-gray-300 rounded mb-2"
-        value={node.isInequality}
+        value={node.isInequality ? 'true' : 'false'}
         onChange={(e) => handleChange('isInequality', e.target.value)}
       >
         <option value="true">True</option>

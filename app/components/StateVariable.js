@@ -1,5 +1,11 @@
+import React from 'react';
+
 export default function StateVariable({ index, variable, onChange, onDelete }) {
-  const handleChange = (field, value) => onChange(index, field, value);
+  const handleChange = (field, value) => {
+    // Parse boolean field
+    const parsedValue = field === 'temporal' ? value === 'true' : value;
+    onChange(index, field, parsedValue);
+  };
 
   return (
     <div className="border p-4 mb-2 rounded bg-white">
@@ -19,7 +25,7 @@ export default function StateVariable({ index, variable, onChange, onDelete }) {
         type="text"
         placeholder="Variable Name"
         className="w-full p-2 border border-gray-300 rounded mb-2"
-        value={variable.name}
+        value={variable.name || ''}
         onChange={(e) => handleChange('name', e.target.value)}
       />
 
@@ -27,8 +33,8 @@ export default function StateVariable({ index, variable, onChange, onDelete }) {
       <label className="block text-sm font-medium mb-1">Temporal</label>
       <select
         className="w-full p-2 border border-gray-300 rounded mb-2"
-        value={variable.temporal}
-        onChange={(e) => handleChange('temporal', e.target.value === "true")}
+        value={variable.temporal ? 'true' : 'false'}
+        onChange={(e) => handleChange('temporal', e.target.value)}
       >
         <option value="true">True</option>
         <option value="false">False</option>
@@ -43,8 +49,13 @@ export default function StateVariable({ index, variable, onChange, onDelete }) {
             type="number"
             placeholder="Min Bound"
             className="w-full p-2 border border-gray-300 rounded"
-            value={variable.bounds.min}
-            onChange={(e) => handleChange('bounds', { ...variable.bounds, min: parseInt(e.target.value) })}
+            value={variable.bounds?.min ?? ''}
+            onChange={(e) =>
+              handleChange('bounds', {
+                ...variable.bounds,
+                min: parseInt(e.target.value),
+              })
+            }
           />
         </div>
         <div>
@@ -53,8 +64,13 @@ export default function StateVariable({ index, variable, onChange, onDelete }) {
             type="number"
             placeholder="Max Bound"
             className="w-full p-2 border border-gray-300 rounded"
-            value={variable.bounds.max}
-            onChange={(e) => handleChange('bounds', { ...variable.bounds, max: parseInt(e.target.value) })}
+            value={variable.bounds?.max ?? ''}
+            onChange={(e) =>
+              handleChange('bounds', {
+                ...variable.bounds,
+                max: parseInt(e.target.value),
+              })
+            }
           />
         </div>
       </div>

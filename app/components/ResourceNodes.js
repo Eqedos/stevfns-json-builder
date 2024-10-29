@@ -1,13 +1,24 @@
+import React from 'react';
 import ResourceNode from './ResourceNode';
 
 export default function ResourceNodes({ resourceNodes = [], setResourceNodes }) {
   const handleAddResourceNode = () => {
-    setResourceNodes([...resourceNodes, { resourceNodeKey: '', resourceName: '', isPublic: false, location: '', isInequality: false, isExpanded: false }]);
+    setResourceNodes([
+      ...resourceNodes,
+      {
+        resourceNodeKey: '',
+        resourceName: '',
+        isPublic: false,
+        location: '',
+        isInequality: false,
+        isExpanded: false,
+      },
+    ]);
   };
 
   const handleResourceNodeChange = (index, field, value) => {
     const updatedNodes = [...resourceNodes];
-    updatedNodes[index][field] = field === 'isPublic' || field === 'isInequality' ? value === 'true' : value;
+    updatedNodes[index][field] = value; // Use the value directly
     setResourceNodes(updatedNodes);
   };
 
@@ -27,7 +38,10 @@ export default function ResourceNodes({ resourceNodes = [], setResourceNodes }) 
           onDelete={handleDeleteResourceNode}
         />
       ))}
-      <button className="px-4 py-2 bg-blue-500 text-white rounded mt-2" onClick={handleAddResourceNode}>
+      <button
+        className="px-4 py-2 bg-blue-500 text-white rounded mt-2"
+        onClick={handleAddResourceNode}
+      >
         Add Resource Node
       </button>
     </div>
