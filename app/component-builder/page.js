@@ -1,4 +1,4 @@
-import ComponentBuilder from "../components/ComponentBuilder";
+import ComponentBuilder from "../components/component/ComponentBuilder";
 export default function ComponentBuilderPage() {
   return (
     <main className="container mx-auto p-4">
