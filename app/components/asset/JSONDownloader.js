@@ -10,7 +10,6 @@ export default function JSONDownloader({
 }) {
   const handleDownload = () => {
     const data = {
-      [assetName]: {
         assetName,
         componentNames,
         rawAssetParameters,
@@ -18,7 +17,6 @@ export default function JSONDownloader({
         costFunction,
         sizeFunction,
         locationParameters,
-      },
     };
     const dataStr =
       'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(data, null, 2));

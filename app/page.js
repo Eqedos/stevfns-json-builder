@@ -18,6 +18,13 @@ export default function HomePage() {
       >
         Go to Asset Builder
       </Link>
+      <p className="mb-4">Click the button below to access the System Builder.</p>
+      <Link
+        href="/system-builder"
+        className="px-6 py-3 bg-blue-500 text-white rounded hover:bg-blue-600"
+      >
+        Go to System Builder
+      </Link>
     </main>
   );
 }
