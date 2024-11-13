@@ -1,100 +1,46 @@
-// SystemEntryBuilder.jsx
-import React, { useState } from 'react';
+// SystemJSONDownloader.jsx
+import React from 'react';
 
-export default function SystemEntryBuilder({ systemEntries, setSystemEntries, brands, assets, locations }) {
-  const [entry, setEntry] = useState({
-    assetID: '',
-    assetName: '',
-    brandID: '',
-    startTime: '',
-    endTime: '',
-    selectedLocations: {},
-  });
+export default function SystemJSONDownloader({
+  locations,
+  components,
+  brands,
+  assets,
+  computedParameters,
+  systemEntries,
+}) {
+  const generateSystemJSON = () => {
+    const systemJSON = {
+      locations,
+      components,
+      brands,
+      assets,
+      computedParameters,
+      system: systemEntries.reduce((acc, entry) => {
+        acc[entry.assetID] = {
+          assetID: entry.assetID,
+          assetName: entry.assetName,
+          brandID: entry.brandID,
+          startTime: entry.startTime,
+          endTime: entry.endTime,
+          locations: entry.selectedLocations,
+        };
+        return acc;
+      }, {}),
+    };
 
-  const addEntry = () => {
-    setSystemEntries((prevEntries) => [...prevEntries, entry]);
-    setEntry({
-      assetID: '',
-      assetName: '',
-      brandID: '',
-      startTime: '',
-      endTime: '',
-      selectedLocations: {},
-    });
-  };
-
-  const handleLocationChange = (key, value) => {
-    setEntry((prev) => ({
-      ...prev,
-      selectedLocations: { ...prev.selectedLocations, [key]: value },
-    }));
+    const blob = new Blob([JSON.stringify(systemJSON, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'system_config.json';
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
-    <div className="mb-4 p-4 bg-white border rounded">
-      <h2 className="text-xl font-semibold mb-2">Add System Entry</h2>
-      <input
-        type="text"
-        placeholder="Asset ID"
-        value={entry.assetID}
-        onChange={(e) => setEntry({ ...entry, assetID: e.target.value })}
-        className="w-full p-2 border border-gray-300 rounded mb-2"
-      />
-      <select
-        value={entry.assetName}
-        onChange={(e) => setEntry({ ...entry, assetName: e.target.value })}
-        className="w-full p-2 border border-gray-300 rounded mb-2"
-      >
-        <option value="">Select Asset</option>
-        {Object.keys(assets).map((asset) => (
-          <option key={asset} value={asset}>
-            {asset}
-          </option>
-        ))}
-      </select>
-      <select
-        value={entry.brandID}
-        onChange={(e) => setEntry({ ...entry, brandID: e.target.value })}
-        className="w-full p-2 border border-gray-300 rounded mb-2"
-      >
-        <option value="">Select Brand</option>
-        {Object.keys(brands).map((brand) => (
-          <option key={brand} value={brand}>
-            {brand}
-          </option>
-        ))}
-      </select>
-      <input
-        type="number"
-        placeholder="Start Time"
-        value={entry.startTime}
-        onChange={(e) => setEntry({ ...entry, startTime: e.target.value })}
-        className="w-full p-2 border border-gray-300 rounded mb-2"
-      />
-      <input
-        type="number"
-        placeholder="End Time"
-        value={entry.endTime}
-        onChange={(e) => setEntry({ ...entry, endTime: e.target.value })}
-        className="w-full p-2 border border-gray-300 rounded mb-2"
-      />
-      <div className="mb-2">
-        {Object.keys(locations).map((location) => (
-          <div key={location} className="mb-1">
-            <label>{location}</label>
-            <input
-              type="text"
-              placeholder="Location Value"
-              value={entry.selectedLocations[location] || ''}
-              onChange={(e) => handleLocationChange(location, e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-          </div>
-        ))}
-      </div>
-      <button onClick={addEntry} className="px-4 py-2 bg-green-500 text-white rounded mt-2">
-        Add System Entry
-      </button>
-    </div>
+    <button onClick={generateSystemJSON} className="px-4 py-2 bg-blue-500 text-white rounded mt-4">
+      Download System JSON
+    </button>
   );
 }
