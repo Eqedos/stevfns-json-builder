@@ -11,11 +11,16 @@ export default function BrandUploader({ brands, setBrands }) {
       reader.onload = (event) => {
         try {
           const brand = JSON.parse(event.target.result);
-          const brandId = brand.brandID || `brand_${Date.now()}`;
-          setBrands((prev) => ({
-            ...prev,
-            [brandId]: brand,
-          }));
+          const brandId = brand.brandId || brand.brandID || brand.id; // Explicitly use brandId from JSON
+
+          if (brandId) {
+            setBrands((prev) => ({
+              ...prev,
+              [brandId]: brand, // Use extracted brandId as the key
+            }));
+          } else {
+            alert(`Error: Brand ID is missing in ${file.name}`);
+          }
         } catch (error) {
           alert(`Error parsing ${file.name}: ${error.message}`);
         }

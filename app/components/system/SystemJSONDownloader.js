@@ -23,7 +23,7 @@ export default function SystemJSONDownloader({
           brandID: entry.brandID,
           startTime: entry.startTime,
           endTime: entry.endTime,
-          locations: entry.selectedLocations,
+          locations: entry.selectedLocations, // Add mapped locations here
         };
         return acc;
       }, {}),

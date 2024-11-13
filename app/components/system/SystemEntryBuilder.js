@@ -1,5 +1,6 @@
 // SystemEntryBuilder.jsx
-import React, { useState } from 'react';
+"use client"
+import React, { useState, useEffect } from 'react';
 
 export default function SystemEntryBuilder({ systemEntries, setSystemEntries, brands, assets, locations }) {
   const [entry, setEntry] = useState({
@@ -11,16 +12,33 @@ export default function SystemEntryBuilder({ systemEntries, setSystemEntries, br
     selectedLocations: {},
   });
 
+  // Populate required location keys from the selected asset
+  useEffect(() => {
+    if (entry.assetName) {
+      const assetLocationKeys = Object.keys(assets[entry.assetName]?.locationParameters || {});
+      const initialLocationMapping = assetLocationKeys.reduce((acc, loc) => {
+        acc[loc] = ''; // Initialize each required location key with an empty value
+        return acc;
+      }, {});
+      setEntry((prev) => ({
+        ...prev,
+        selectedLocations: initialLocationMapping,
+      }));
+    }
+  }, [entry.assetName, assets]);
+
   const addEntry = () => {
-    setSystemEntries((prevEntries) => [...prevEntries, entry]);
-    setEntry({
-      assetID: '',
-      assetName: '',
-      brandID: '',
-      startTime: '',
-      endTime: '',
-      selectedLocations: {},
-    });
+    if (entry.assetID && entry.assetName && entry.brandID && entry.startTime && entry.endTime) {
+      setSystemEntries((prevEntries) => [...prevEntries, entry]);
+      setEntry({
+        assetID: '',
+        assetName: '',
+        brandID: '',
+        startTime: '',
+        endTime: '',
+        selectedLocations: {},
+      });
+    }
   };
 
   const handleLocationChange = (key, value) => {
@@ -78,17 +96,25 @@ export default function SystemEntryBuilder({ systemEntries, setSystemEntries, br
         onChange={(e) => setEntry({ ...entry, endTime: e.target.value })}
         className="w-full p-2 border border-gray-300 rounded mb-2"
       />
+
+      {/* Location Mapping Section */}
       <div className="mb-2">
-        {Object.keys(locations).map((location) => (
+        <h3 className="text-lg font-semibold">Map Asset Locations</h3>
+        {Object.keys(entry.selectedLocations).map((location) => (
           <div key={location} className="mb-1">
             <label>{location}</label>
-            <input
-              type="text"
-              placeholder="Location Value"
+            <select
               value={entry.selectedLocations[location] || ''}
               onChange={(e) => handleLocationChange(location, e.target.value)}
               className="w-full p-2 border border-gray-300 rounded"
-            />
+            >
+              <option value="">Select system location</option>
+              {Object.keys(locations).map((locKey) => (
+                <option key={locKey} value={locKey}>
+                  {locations[locKey].locationName}
+                </option>
+              ))}
+            </select>
           </div>
         ))}
       </div>
