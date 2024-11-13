@@ -24,13 +24,21 @@ export default function LocationBuilder({ locations, setLocations }) {
           ...prev[location],
           locationParameters: {
             ...prev[location].locationParameters,
-            [newParameterName]: parseFloat(newParameterValue) || newParameterValue,
+            [newParameterName]: parseValue(newParameterValue),
           },
         },
       }));
       setNewParameterName('');
       setNewParameterValue('');
     }
+  };
+
+  const parseValue = (value) => {
+    // Convert comma-separated values to an array, or keep as single value if no commas
+    if (value.includes(',')) {
+      return value.split(',').map((v) => parseFloat(v.trim()) || v.trim());
+    }
+    return parseFloat(value) || value;
   };
 
   const handleParameterChange = (location, paramName, value) => {
@@ -40,7 +48,7 @@ export default function LocationBuilder({ locations, setLocations }) {
         ...prev[location],
         locationParameters: {
           ...prev[location].locationParameters,
-          [paramName]: parseFloat(value) || value,
+          [paramName]: parseValue(value),
         },
       },
     }));
@@ -85,7 +93,7 @@ export default function LocationBuilder({ locations, setLocations }) {
               <label className="w-1/3">{param}</label>
               <input
                 type="text"
-                value={value}
+                value={Array.isArray(value) ? value.join(', ') : value}
                 className="w-2/3 p-2 border rounded"
                 onChange={(e) => handleParameterChange(location, param, e.target.value)}
               />
@@ -109,7 +117,7 @@ export default function LocationBuilder({ locations, setLocations }) {
             />
             <input
               type="text"
-              placeholder="Parameter Value"
+              placeholder="Parameter Value (comma-separated for vectors)"
               className="w-2/3 p-2 border rounded"
               value={newParameterValue}
               onChange={(e) => setNewParameterValue(e.target.value)}
