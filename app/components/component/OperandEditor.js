@@ -2,7 +2,7 @@ import { useState } from 'react';
 import NestedFunctionEditor from './NestedFunctionEditor';
 
 // Available operations for the user to select
-export const AVAILABLE_OPERATIONS = ['multiply', 'neg_identity', 'add', 'subtract', 'divide'];
+export const AVAILABLE_OPERATIONS = ['multiply', 'neg_identity', 'add', 'subtract', 'divide','add','asin','cos','max','maximum','radians','sin','sqrt','square','sum','sum_squares','identity'];
 
 export default function OperandEditor({ 
   operand = {}, 

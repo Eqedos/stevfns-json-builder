@@ -1,11 +1,3 @@
 // availableOperations.js
-export const AVAILABLE_OPERATIONS = [
-    'add',
-    'subtract',
-    'multiply',
-    'divide',
-    'neg_identity',
-    'sum',
-    // Add any other operations you need
-  ];
-  
+
+export const AVAILABLE_OPERATIONS = ['multiply', 'neg_identity', 'add', 'subtract', 'divide','add','asin','cos','max','maximum','radians','sin','sqrt','square','sum','sum_squares','identity'];
