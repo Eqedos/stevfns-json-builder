@@ -1,4 +1,3 @@
-// SystemEntryBuilder.jsx
 "use client"
 import React, { useState, useEffect } from 'react';
 
@@ -7,8 +6,8 @@ export default function SystemEntryBuilder({ systemEntries, setSystemEntries, br
     assetID: '',
     assetName: '',
     brandID: '',
-    startTime: '',
-    endTime: '',
+    startTime: 0, // Default to number
+    endTime: 0,   // Default to number
     selectedLocations: {},
   });
 
@@ -28,14 +27,14 @@ export default function SystemEntryBuilder({ systemEntries, setSystemEntries, br
   }, [entry.assetName, assets]);
 
   const addEntry = () => {
-    if (entry.assetID && entry.assetName && entry.brandID && entry.startTime && entry.endTime) {
+    if (entry.assetID && entry.assetName && entry.brandID && entry.startTime >= 0 && entry.endTime > 0) {
       setSystemEntries((prevEntries) => [...prevEntries, entry]);
       setEntry({
         assetID: '',
         assetName: '',
         brandID: '',
-        startTime: '',
-        endTime: '',
+        startTime: 0,
+        endTime: 0,
         selectedLocations: {},
       });
     }
@@ -86,14 +85,14 @@ export default function SystemEntryBuilder({ systemEntries, setSystemEntries, br
         type="number"
         placeholder="Start Time"
         value={entry.startTime}
-        onChange={(e) => setEntry({ ...entry, startTime: e.target.value })}
+        onChange={(e) => setEntry({ ...entry, startTime: Number(e.target.value) })}
         className="w-full p-2 border border-gray-300 rounded mb-2"
       />
       <input
         type="number"
         placeholder="End Time"
         value={entry.endTime}
-        onChange={(e) => setEntry({ ...entry, endTime: e.target.value })}
+        onChange={(e) => setEntry({ ...entry, endTime: Number(e.target.value) })}
         className="w-full p-2 border border-gray-300 rounded mb-2"
       />
 
