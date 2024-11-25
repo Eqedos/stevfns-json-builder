@@ -1,12 +1,18 @@
 import { useState } from 'react';
 import OperandEditor, { AVAILABLE_OPERATIONS } from './OperandEditor';
 
-export default function NestedFunctionEditor({ nestedFunction, setNestedFunction, rawParameters, locationParameters, stateVariables }) {
+export default function NestedFunctionEditor({ 
+  nestedFunction = {}, 
+  setNestedFunction, 
+  rawParameters, 
+  locationParameters, 
+  stateVariables 
+}) {
   const [operation, setOperation] = useState(nestedFunction.operation || 'multiply');
   const [operands, setOperands] = useState(nestedFunction.operands || []);
 
   const handleAddNestedOperand = () => {
-    setOperands([...operands, {}]);
+    setOperands([...operands, {}]); // Add an empty operand
   };
 
   const handleNestedOperandChange = (index, updatedOperand) => {
@@ -16,15 +22,18 @@ export default function NestedFunctionEditor({ nestedFunction, setNestedFunction
     setNestedFunction({ operation, operands: updatedOperands });
   };
 
+  const handleOperationChange = (newOperation) => {
+    setOperation(newOperation);
+    setNestedFunction({ operation: newOperation, operands });
+  };
+
   return (
     <div className="border p-2 mb-2 rounded bg-gray-100">
+      <label className="block mb-2 text-md font-semibold">Operation</label>
       <select
         className="w-full p-2 border border-gray-300 rounded mb-2"
         value={operation}
-        onChange={(e) => {
-          setOperation(e.target.value);
-          setNestedFunction({ operation: e.target.value, operands });
-        }}
+        onChange={(e) => handleOperationChange(e.target.value)}
       >
         {AVAILABLE_OPERATIONS.map((op) => (
           <option key={op} value={op}>

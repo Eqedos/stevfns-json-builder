@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import NestedFunctionEditor from './NestedFunctionEditor';
 
-// Available operations for the user to select
-export const AVAILABLE_OPERATIONS = ['multiply', 'neg_identity', 'add', 'subtract', 'divide','add','asin','cos','max','maximum','radians','sin','sqrt','square','sum','sum_squares','identity'];
+export const AVAILABLE_OPERATIONS = [
+  'multiply', 'neg_identity', 'add', 'subtract', 'divide', 
+  'asin', 'cos', 'max', 'maximum', 'radians', 
+  'sin', 'sqrt', 'square', 'sum', 'sum_squares', 'identity'
+];
 
 export default function OperandEditor({ 
   operand = {}, 
@@ -53,14 +56,14 @@ export default function OperandEditor({
     setOperand({ type: operandType, path });
   };
 
-  const handleNestedFunctionChange = (operation, operands) => {
-    setNestedFunction({ operation, operands });
-    setOperand({ operation, operands });
+  const handleNestedFunctionChange = (updatedNestedFunction) => {
+    setNestedFunction(updatedNestedFunction);
+    setOperand(updatedNestedFunction);
   };
 
   return (
     <div className="border p-2 mb-2 rounded bg-gray-50">
-      {/* Operand Type Selection */}
+      <label className="block text-sm font-medium mb-2">Operand Type</label>
       <select
         className="w-full p-2 border border-gray-300 rounded mb-2"
         value={operandType}
@@ -105,7 +108,6 @@ export default function OperandEditor({
             ))}
           </select>
 
-          {/* Second dropdown for selecting a specific parameter within the chosen location */}
           {selectedLocation && (
             <select
               className="w-full p-2 border border-gray-300 rounded mb-2"
@@ -162,7 +164,6 @@ export default function OperandEditor({
           setNestedFunction={handleNestedFunctionChange}
           rawParameters={rawParameters}
           locationParameters={locationParameters}
-          computedParameters={computedParameters}
           stateVariables={stateVariables}
         />
       )}
