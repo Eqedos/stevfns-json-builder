@@ -1,4 +1,3 @@
-// ComputedParametersUploader.jsx
 import React, { useRef } from 'react';
 
 export default function ComputedParametersUploader({ computedParameters, setComputedParameters }) {
@@ -6,15 +5,36 @@ export default function ComputedParametersUploader({ computedParameters, setComp
 
   const handleFileUpload = (e) => {
     const files = e.target.files;
+    const newComputedParameters = {};
+
     Array.from(files).forEach((file) => {
       const reader = new FileReader();
       reader.onload = (event) => {
         try {
-          const computedParam = JSON.parse(event.target.result);
-          setComputedParameters((prev) => ({
-            ...prev,
-            ...computedParam,
-          }));
+          const uploadedData = JSON.parse(event.target.result);
+
+          if (!uploadedData.assetId) {
+            alert(`Invalid format in ${file.name}: Missing "assetId" field.`);
+            return;
+          }
+
+          const { assetId, ...parameters } = uploadedData;
+
+          if (!assetId || typeof parameters !== 'object') {
+            alert(`Invalid data in ${file.name}: Could not process parameters.`);
+            return;
+          }
+
+          // Add the parsed parameters to the newComputedParameters object
+          newComputedParameters[assetId] = parameters;
+
+          // Merge into the state after processing all files
+          if (Object.keys(newComputedParameters).length === files.length) {
+            setComputedParameters((prev) => ({
+              ...prev,
+              ...newComputedParameters,
+            }));
+          }
         } catch (error) {
           alert(`Error parsing ${file.name}: ${error.message}`);
         }
